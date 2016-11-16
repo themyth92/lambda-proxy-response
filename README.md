@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/themyth92/lambda-proxy-response.svg?branch=master)](https://travis-ci.org/themyth92/lambda-proxy-response)
+
 # lambda-proxy-response
 A wrap around response for aws lambda integration proxy
 
