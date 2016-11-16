@@ -1,0 +1,26 @@
+{
+  "name": "lambda-proxy-response",
+  "version": "1.0.0",
+  "description": "A wrap around response for lambda proxy integration",
+  "main": "index.js",
+  "scripts": {
+    "test": "jasmine ./test/lambdaProxy.spec.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/themyth92/lambda-proxy-response.git"
+  },
+  "keywords": [
+    "lambda",
+    "lambda",
+    "proxy",
+    "integration",
+    "aws"
+  ],
+  "author": "themyth92",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/themyth92/lambda-proxy-response/issues"
+  },
+  "homepage": "https://github.com/themyth92/lambda-proxy-response#readme"
+}
