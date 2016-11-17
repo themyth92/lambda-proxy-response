@@ -14,7 +14,7 @@ A wrap around response for aws lambda integration proxy
   exports.handler = (event, context, callback) => {
     // response method needs at least 3 parameters
     // statusCode, headers, body
-    var response = lambdaProxy.response(200, { 'X-header': 'Your headers value' }, { 'bodyData': 'yourBodyData });
+    var response = lambdaProxy.response(200, { 'X-header': 'Your headers value' }, { 'bodyData': 'yourBodyData' });
 
     // -> response = {
     //     statusCodes: 200,
@@ -26,7 +26,7 @@ A wrap around response for aws lambda integration proxy
 
     // OR you can pass the callback to the `response` method and it will be called automatically
     // The above implementation equal to
-    lambdaProxy.response(200, { 'X-header': 'Your headers value' }, { 'bodyData': 'yourBodyData }, callback);
+    lambdaProxy.response(200, { 'X-header': 'Your headers value' }, { 'bodyData': 'yourBodyData' }, callback);
   };
   ```
 
