@@ -1,57 +1,93 @@
 'use strict';
-exports.response = function response(status, headers, body, cb) {
-  // hearders must be an object, if not APIGateway will throw error
-  if (typeof headers !== 'object') {
-    headers = {};
+class LambdaProxyResponse {
+  constructor(options) {
+    this.options = options || { headers: {}, body: {}, status: null, extendHeader: true };
   }
 
-  if (typeof body === 'undefined' || typeof body === 'null') {
-    body = {};
+  config(options) {
+    if (typeof options === 'object' && options !== null) {
+      Object.assign(this.options, options);
+    }
   }
 
-  status = status || 400;
-  var responseTemplate = createResponseTemplate(status, headers, body);
+  response(status, headers, body, cb, options) {
+    let responseStatus = {};
+    let responseHeader = {};
+    let responseBody = {};
 
-  // call cb
-  if (cb) {
-    cb(null, responseTemplate);
+    responseStatus = status || this.options.status || 400;
+
+    // set headers
+    if (typeof headers !== 'object' || headers === null ) {
+      if (this.options && this.options.headers) {
+        responseHeader = this.options.headers;
+      } else {
+        responseHeader = {};
+      }
+    } else {
+      if (this.options.headers && this.options.extendHeader) {
+        responseHeader = Object.assign(responseHeader, headers, this.options.headers);
+      } else {
+        responseHeader = headers;
+      }
+    }
+
+    // set body
+    if (typeof body === 'undefined' || body === null) {
+      if (this.options && this.options.body) {
+        responseBody = this.options.body;
+      } else {
+        responseBody = {};
+      }
+    } else {
+      responseBody = body;
+    }
+
+    const responseTemplate = this._createResponseTemplate(responseStatus, responseHeader, responseBody);
+
+    // call cb
+    if (typeof cb === 'function') {
+      cb(null, responseTemplate);
+    }
+
+    return responseTemplate;
   }
 
-  return responseTemplate;
-};
+  ok(headers, body, cb, options) {
+    return this.response(200, headers, body, cb, options || {});
+  }
 
-exports.ok = function ok(headers, body, cb) {
-  return exports.response(200, headers, body, cb);
+  created(headers, body, cb, options) {
+    return this.response(201, headers, body, cb, options || {});
+  }
+
+  badRequest(headers, body, cb, options) {
+    return this.response(400, headers, body, cb, options || {});
+  }
+
+  notAuthorized(headers, body, cb, options) {
+    return this.response(401, headers, body, cb, options || {});
+  }
+
+  forbidden(headers, body, cb, options) {
+    return this.response(403, headers, body, cb, options || {});
+  }
+
+  notFound(headers, body, cb, options) {
+    return this.response(404, headers, body, cb, options || {});
+  }
+
+  serverError(headers, body, cb, options) {
+    return this.response(500, headers, body, cb, options || {});
+  }
+
+  _createResponseTemplate(status, headers, body) {
+    return {
+      statusCode: status,
+      body: JSON.stringify(body),
+      headers: headers
+    }; 
+  }
 }
 
-exports.created = function created(headers, body, cb) {
-  return exports.response(201, headers, body, cb);
-}
-
-exports.badRequest = function badRequest(headers, body, cb) {
-  return exports.response(400, headers, body, cb);
-}
-
-exports.notAuthorized = function notAuthorized(headers, body, cb) {
-  return exports.response(401, headers, body, cb);
-}
-
-exports.forbidden = function forbidden(headers, body, cb) {
-  return exports.response(403, headers, body, cb);
-}
-
-exports.notFound = function notFound(headers, body, cb) {
-  return exports.response(404, headers, body, cb);
-}
-
-exports.serverError = function serverError(headers, body, cb) {
-  return exports.response(500, headers, body, cb);
-}
-
-function createResponseTemplate(status, headers, body) {
-  return {
-    statusCode: status,
-    body: JSON.stringify(body),
-    headers: headers
-  };
-}
+module.exports = new LambdaProxyResponse();
