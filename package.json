@@ -1,6 +1,6 @@
 {
   "name": "lambda-proxy-response",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A wrap around response for lambda proxy integration",
   "main": "index.js",
   "scripts": {
