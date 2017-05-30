@@ -9,7 +9,7 @@ A wrap around response for aws lambda integration proxy
 ## Response creation
 1. Response can be created using `response` method
   ```javascript
-  const lambdaProxy = require('lambda-proxy-reponse');
+  const lambdaProxy = require('lambda-proxy-response');
 
   exports.handler = (event, context, callback) => {
     // response method needs at least 3 parameters
